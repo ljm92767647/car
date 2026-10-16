@@ -22,3 +22,5 @@ header button:hover{opacity:1;text-decoration:underline;text-underline-offset:5p
 #classic-toggle{font-size:13px;opacity:.7}#classic-toggle[data-state="1"]{opacity:1;border-bottom-style:solid;border-bottom-color:currentColor}#classic-toggle[data-state="0"]{border-bottom-color:transparent}
 
 @media(max-width:760px){#classic-toggle{font-size:12px}}
+
+#classic-toggle[aria-pressed="false"]{color:#c2c6d0;opacity:.5}#classic-toggle[aria-pressed="true"]{color:#fff;opacity:1;font-weight:700;text-shadow:0 0 9px #ffffff80;border-bottom:2px solid #fff}

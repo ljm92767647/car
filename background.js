@@ -1,8 +1,1 @@
-const backgroundVideo=document.querySelector('#background-video');
-if(backgroundVideo){
- backgroundVideo.muted=true;
- const playBackground=()=>{if(!document.hidden)backgroundVideo.play().catch(()=>{});};
- document.addEventListener('visibilitychange',()=>{if(document.hidden)backgroundVideo.pause();else playBackground();});
- document.addEventListener('pointerdown',playBackground,{once:true,passive:true});
- playBackground();
-}
+(()=>{const video=document.querySelector('#background-video');if(!video)return;video.muted=true;const narrow=matchMedia('(max-width:760px)').matches,connection=navigator.connection;let started=false;function start(){if(started||document.hidden)return;if(connection?.saveData||matchMedia('(prefers-reduced-motion: reduce)').matches)return;started=true;const sources=[...video.querySelectorAll('source')],source=narrow?sources.find(s=>s.dataset.media):sources.find(s=>!s.dataset.media);video.src=source.dataset.src;video.preload='metadata';video.play().catch(()=>{});}document.addEventListener('visibilitychange',()=>{if(document.hidden)video.pause();else if(started)video.play().catch(()=>{});else start();});if(narrow){setTimeout(()=>{if('requestIdleCallback'in window)requestIdleCallback(start,{timeout:1800});else start();},1400);}else{if('requestIdleCallback'in window)requestIdleCallback(start,{timeout:1000});else setTimeout(start,400);}})();
