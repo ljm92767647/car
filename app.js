@@ -64,7 +64,7 @@ function draw(){frame=0;let moving=false;for(const k of ['t','x','y']){if(Math.a
  const g=geometry(camera.t),ps=positions(g),names=g.narrow?camera.t>=.44:g.pitch>=g.h+30,info=g.narrow?camera.t>=.68:camera.t>=.8;
  scene.dataset.zoom=camera.t.toFixed(4);scene.dataset.center=String(lockedId??'');scene.dataset.sort=mode;
  for(const i of items){const p=ps.get(i.c.id),x=p.x+camera.x,y=p.y+camera.y-g.h/2,visible=x+p.v/2>0&&x-p.v/2<W&&y+g.h>0&&y<H;i.el.hidden=!visible;if(!visible)continue;
- i.el.style.cssText=`left:${x-p.w/2}px;top:${y}px;width:${p.w}px;height:${g.h}px;--art-height:${g.h}px`;
+ i.el.style.cssText=`left:${x-p.v/2}px;top:${y}px;width:${p.v}px;height:${g.h}px;--art-height:${g.h}px`;
 
  i.label.textContent=camera.t>.95?i.c.name:i.c.name.replace(/\s*\([^)]*\)/g,'').replace(i.c.brand,'').trim();i.caption.hidden=!names;i.caption.style.cssText=`top:${g.h+9}px;font-size:${camera.t>.95?14:clamp(8+camera.t*4,8,12)}px`;
  i.tag.hidden=!names||info||g.narrow||g.pitch<g.h+55;i.tag.textContent=i.heading;i.info.hidden=!info;i.info.textContent=i.category||(mode==='brand'?labelBrand(i.c.id):i.c.style);
