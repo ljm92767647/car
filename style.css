@@ -23,4 +23,6 @@ header button:hover{opacity:1;text-decoration:underline;text-underline-offset:5p
 
 @media(max-width:760px){#classic-toggle{font-size:12px}}
 
-#classic-toggle[aria-pressed="false"]{color:#c2c6d0;opacity:.5}#classic-toggle[aria-pressed="true"]{color:#fff;opacity:1;font-weight:700;text-shadow:0 0 9px #ffffff80;border-bottom:2px solid #fff}
+
+
+#classic-toggle{color:#f4f7ff;text-shadow:inherit}#classic-toggle[aria-pressed="false"]{opacity:.6;font-weight:400;border-bottom:1px solid transparent}#classic-toggle[aria-pressed="true"]{opacity:1;font-weight:600;border-bottom:1px solid currentColor;text-shadow:inherit}
