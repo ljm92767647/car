@@ -28,3 +28,5 @@ header button:hover{opacity:1;text-decoration:underline;text-underline-offset:5p
 
 
 #classic-control{opacity:1}#classic-toggle{font-size:13px}@media(max-width:760px){#classic-toggle{font-size:12px}}
+
+.brand-tag{font-weight:700;line-height:1.25;color:#f4f7ff;text-shadow:0 1px 5px #000,0 0 8px #000a;z-index:2}
