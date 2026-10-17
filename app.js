@@ -100,19 +100,22 @@ function focus(c){const ps=positions(geometry(c.t)),p=ps.get(lockedId);if(!p)ret
 function bound(c){if(selectionCentered&&lockedId!==null)return;const g=geometry(c.t),ps=[...positions(g).values()],edge=24;const left=Math.min(...ps.map(p=>p.x-p.w/2)),right=Math.max(...ps.map(p=>p.x+p.w/2));c.x=right-left<W?0:clamp(c.x,W-right-edge,-left+edge);const ys=ps.map(p=>p.y);c.y=clamp(c.y,-Math.max(...ys)+H/2-24,-Math.min(...ys)+H/2);}
 function wake(){if(!frame)frame=requestAnimationFrame(draw);}
 function draw(){frame=0;let moving=false;for(const k of ['t','x','y']){if(Math.abs(camera[k]-target[k])>(k==='t'?.0001:.1))moving=true;camera[k]+=(target[k]-camera[k])*(matchMedia('(prefers-reduced-motion:reduce)').matches?1:.24)}if(!moving)Object.assign(camera,target);
- const g=geometry(camera.t),ps=positions(g),names=g.narrow?camera.t>=.44:g.pitch>=g.h+30,info=camera.t>=.8||(g.h*2.3>=W*.34&&g.gap>=W*.2&&g.pitch>=H*.38);
+ const g=geometry(camera.t),ps=positions(g),names=g.narrow?camera.t>=.44:g.pitch>=g.h+30;
  if(selectionCentered&&lockedId!==null&&Math.abs(camera.t-target.t)>.0001){const pinned=ps.get(lockedId);if(pinned){camera.x=W/2-pinned.x;camera.y=H/2-pinned.y;}}
  scene.dataset.zoom=camera.t.toFixed(4);scene.dataset.center=String(lockedId??'');scene.dataset.sort=mode;
  for(const i of items){const p=ps.get(i.c.id),x=p.x+camera.x,y=p.y+camera.y-g.h/2,visible=x+p.v/2>0&&x-p.v/2<W&&y+g.h>0&&y<H;i.el.hidden=!visible;if(!visible)continue;
  const quality=p.v*Math.min(window.devicePixelRatio||1,2)>440?'detail':'small';if(i.quality!==quality&&i.quality!=='detail'){i.im.setAttribute('href','assets/'+quality+'/car-'+i.c.id+'.webp');i.quality=quality;}
  i.el.style.cssText=`left:${x-p.v/2}px;top:${y}px;width:${p.v}px;height:${g.h}px;--art-height:${g.h}px`;
 
- i.label.textContent=camera.t>.95?i.c.name:i.c.name.replace(/\s*\([^)]*\)/g,'').replace(i.c.brand,'').trim();i.caption.hidden=!names;i.caption.style.cssText=`top:${g.h+9}px;font-size:${camera.t>.95?14:clamp(8+camera.t*4,8,12)}px`;
+ const aspect=G[i.c.id].box[2]/G[i.c.id].box[3],artWidth=Math.min(p.v,g.h*aspect);
+ const maxArtWidth=Math.min(H*.66,(W-32)/2.3,470)*Math.min(2.3,aspect);
+ const showInfo=artWidth>=Math.min(W*(W<=760?.46:.28),420,maxArtWidth*.8);
+ i.label.textContent=camera.t>.95?i.c.name:i.c.name.replace(/\s*\([^)]*\)/g,'').replace(i.c.brand,'').trim();i.caption.hidden=!(names||showInfo);i.caption.style.cssText=`top:${g.h+9}px;font-size:${camera.t>.95?14:clamp(8+camera.t*4,8,12)}px`;
  const showTitle=camera.t>=.1&&Boolean(i.heading);
  i.tag.hidden=!showTitle;i.tag.textContent=i.heading;i.tag.className='explore-tag '+(mode==='brand'?'brand-tag':'parking-tag');
  i.tag.style.cssText='left:0;top:0;bottom:auto;transform:translateY(-50%);width:max-content;max-width:'+Math.min(340,W-24)+'px;font-size:'+(camera.t>.95?14:clamp(8+camera.t*4,8,12))+'px;font-weight:700;white-space:nowrap;';
 
- i.info.hidden=!info;i.info.textContent=carDetails(i.c);
+ i.info.hidden=!showInfo;i.info.textContent=carDetails(i.c);
  i.el.setAttribute('aria-current',String(i.c.id===lockedId));
  }
  if(moving)wake();
