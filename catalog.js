@@ -1,7 +1,7 @@
 /* Catalogue presentation reuses the free view's groups, vehicles and silhouette geometry. */
 (()=>{
  'use strict';
- let presentation='list',selectedGroup=null,observer=null,disposeCarousel=()=>{};
+ let presentation='list',selectedGroup=null,observer=null,disposeLayout=()=>{};
  const pane=document.querySelector('#catalog-pane');
  const brands={'부가티':'Bugatti','롤스로이스':'Rolls-Royce','벤틀리':'Bentley','마이바흐':'Mercedes-Maybach','페라리':'Ferrari','람보르기니':'Lamborghini','맥라렌':'McLaren','애스턴 마틴':'Aston Martin','포르쉐':'Porsche','메르세데스 벤츠':'Mercedes-Benz','BMW':'BMW','아우디':'Audi','레인지로버':'Range Rover','마세라티':'Maserati','렉서스':'Lexus','테슬라':'Tesla','재규어':'Jaguar','쉐보레':'Chevrolet','포드':'Ford','알파 로메오':'Alfa Romeo','캐딜락':'Cadillac','링컨':'Lincoln'};
  const title=label=>mode==='brand'?(brands[label]||label):label;
@@ -24,37 +24,25 @@
   svg.append(image);return svg;
  }
  function load(card){const image=card.querySelector('image');if(image&&!image.hasAttribute('href'))image.setAttribute('href',image.dataset.src);}
- function carousel(area,products,ids){
-  const dots=node('div','catalog-dots');dots.hidden=true;dots.tabIndex=0;dots.setAttribute('role','group');dots.setAttribute('aria-label','차량 이동');
-  const status=node('span','catalog-position');status.setAttribute('aria-live','polite');status.setAttribute('aria-atomic','true');dots.append(status);
-  const markers=Array.from({length:9},(_,slot)=>{const dot=node('span','catalog-dot');dot.dataset.offset=slot-4;dot.setAttribute('aria-hidden','true');dots.append(dot);return dot;});pane.append(dots);
-  const cards=[...products.children];let active=0,goal=0,enabled=false,scrollFrame=0,wheelTime=-Infinity,wheelDelta=0,disposed=false,drag=null,suppressClick=false,dragFrame=0;
-  const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
-  function destination(index){const card=cards[index];return Math.max(0,Math.min(area.scrollWidth-area.clientWidth,card.offsetLeft-area.offsetLeft+card.offsetWidth/2-area.clientWidth/2));}
-  function sync(){scrollFrame=0;if(!enabled)return;const stride=destination(1)-destination(0),position=Math.max(0,Math.min(cards.length-1,(area.scrollLeft-destination(0))/(stride||1)));active=Math.round(position);dots.dataset.index=String(active);dots.dataset.position=position.toFixed(4);dots.setAttribute('aria-label',`차량 이동 · ${active+1} / ${ids.length} · ${D.cars[ids[active]].name}`);status.textContent=`${active+1} / ${ids.length}`;markers.forEach((dot,slot)=>{const index=active+slot-4,offset=index-position,distance=Math.min(5,Math.abs(offset)),sizes=[28,23,17,11,7,4],lo=Math.floor(distance),hi=Math.min(5,lo+1),size=sizes[lo]+(sizes[hi]-sizes[lo])*(distance-lo);dot.hidden=index<0||index>=ids.length;dot.className='catalog-dot'+(index===active?' current':'');dot.style.setProperty('--offset',String(offset));dot.style.setProperty('--dot-size',size+'px');dot.style.opacity=String(Math.max(0,Math.min(1,4.5-distance)));});}
-  function schedule(){if(!scrollFrame)scrollFrame=requestAnimationFrame(sync);}
-  function go(index){goal=Math.max(0,Math.min(cards.length-1,index));area.scrollTo({left:destination(goal),behavior:reduced()?'instant':'smooth'});}
-  function refresh(){if(disposed)return;const narrow=matchMedia('(max-width:760px)').matches;
-   const natural=cards.reduce((sum,card)=>sum+card.offsetWidth,0)+Math.max(0,cards.length-1)*10;
-   const next=!narrow&&natural>area.clientWidth+1;
-   if(next){const edge=Math.max(0,(area.clientWidth-cards[0].offsetWidth)/2);products.style.setProperty('--catalog-edge',edge+'px');}
-   area.classList.toggle('is-carousel',next);dots.hidden=!next;
-   if(next){enabled=true;area.scrollLeft=destination(active);goal=active;sync();}else{enabled=false;area.scrollLeft=0;}
+ function fitProducts(area,products){
+  const cards=[...products.querySelectorAll('.catalog-card')];
+  function fit(){
+   if(matchMedia('(max-width:760px)').matches){products.style.cssText='';return;}
+   const width=area.clientWidth,height=area.clientHeight,gap=10,n=cards.length;
+   const minimum=Math.min(360,Math.max(64,(height-76)*1.85));
+   const rows=n>1&&(width-gap*(n-1))/n<minimum?2:1,columns=Math.ceil(n/rows);
+   let cardWidth=Math.min(n===1?840:640,(width-gap*(columns-1))/columns);
+   for(let attempt=0;attempt<3;attempt++){
+    products.style.setProperty('--catalog-columns',columns);products.style.setProperty('--catalog-card-width',Math.max(64,cardWidth)+'px');
+    const caption=Math.max(...cards.map(c=>c.querySelector('.catalog-caption').getBoundingClientRect().height+c.querySelector('.catalog-info').getBoundingClientRect().height+12));
+    cardWidth=Math.min(cardWidth,Math.max(64,((height-28-gap*(rows-1))/rows-caption)*1.85));
+   }
+   products.style.setProperty('--catalog-card-width',cardWidth+'px');products.dataset.rows=String(rows);
   }
-  function wheel(event){if(!enabled||presentation!=='list'||document.querySelector('#numbers').open||document.querySelector('#rank-dialog').open||event.ctrlKey||event.metaKey)return;const amount=Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;if(!amount)return;event.preventDefault();const now=performance.now();if(now-wheelTime<200)return;wheelDelta+=amount*(event.deltaMode===1?16:event.deltaMode===2?area.clientWidth:1);if(Math.abs(wheelDelta)<24)return;goal=active;go(goal+Math.sign(wheelDelta));wheelDelta=0;wheelTime=now;}
-  function dragScroll(){if(!drag)return;const stride=destination(1)-destination(0);area.scrollTo({left:Math.max(0,Math.min(area.scrollWidth-area.clientWidth,drag.scroll+drag.dx/drag.pitch*stride+drag.travel)),behavior:'instant'});schedule();}
-  function keepDragging(now){dragFrame=0;if(!drag||disposed)return;const elapsed=Math.min(40,now-drag.time);drag.time=now;const speed=Math.sign(drag.dx)*Math.min(6,Math.max(0,(Math.abs(drag.dx)-8)/drag.pitch)*2);drag.travel+=speed*(destination(1)-destination(0))*elapsed/1000;dragScroll();dragFrame=requestAnimationFrame(keepDragging);}
-  dots.addEventListener('pointerdown',event=>{suppressClick=false;if(!enabled||event.button!==0)return;const rect=dots.getBoundingClientRect(),ring=dots.querySelector('.current')?.getBoundingClientRect();if(!ring||Math.abs(event.clientX-ring.left-ring.width/2)>20||Math.abs(event.clientY-ring.top-ring.height/2)>22)return;event.preventDefault();area.scrollTo({left:area.scrollLeft,behavior:'instant'});drag={id:event.pointerId,x:event.clientX,scroll:area.scrollLeft,dx:0,travel:0,time:performance.now(),moved:false,pitch:rect.width/10};dots.setPointerCapture(event.pointerId);dots.classList.add('dragging');area.classList.add('is-dragging');dragFrame=requestAnimationFrame(keepDragging);});
-  dots.addEventListener('pointermove',event=>{if(!drag||event.pointerId!==drag.id)return;drag.dx=event.clientX-drag.x;drag.moved=drag.moved||Math.abs(drag.dx)>5;dragScroll();});
-  function releaseDrag(event){if(!drag||event.pointerId!==drag.id)return;suppressClick=true;drag=null;if(dragFrame)cancelAnimationFrame(dragFrame);dragFrame=0;dots.classList.remove('dragging');area.classList.remove('is-dragging');if(dots.hasPointerCapture(event.pointerId))dots.releasePointerCapture(event.pointerId);sync();goal=active;}
-  dots.addEventListener('pointerup',event=>releaseDrag(event));dots.addEventListener('pointercancel',event=>releaseDrag(event,true));
-  dots.addEventListener('click',event=>{if(suppressClick){suppressClick=false;return;}if(!enabled)return;const rect=dots.getBoundingClientRect(),distance=event.clientX-rect.left-rect.width/2;if(Math.abs(distance)<17)return;const steps=Math.max(1,Math.round(Math.abs(distance)/(rect.width/10)));go(active+Math.sign(distance)*steps);});
-  dots.addEventListener('keydown',event=>{const step=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:0;if(step){event.preventDefault();go(active+step);}else if(event.key==='Home'||event.key==='End'){event.preventDefault();go(event.key==='Home'?0:cards.length-1);}});
-  area.addEventListener('scroll',schedule,{passive:true});document.addEventListener('wheel',wheel,{passive:false});const resize=new ResizeObserver(refresh);resize.observe(area);refresh();
-  return()=>{disposed=true;drag=null;if(dragFrame)cancelAnimationFrame(dragFrame);resize.disconnect();document.removeEventListener('wheel',wheel);area.removeEventListener('scroll',schedule);if(scrollFrame)cancelAnimationFrame(scrollFrame);};
+  const resize=new ResizeObserver(fit);resize.observe(area);fit();return()=>resize.disconnect();
  }
  function render(){
-  disposeCarousel();observer?.disconnect();pane.replaceChildren();pane.dataset.mode=mode;
+  disposeLayout();observer?.disconnect();pane.replaceChildren();pane.dataset.mode=mode;
   const all=groups(),ids=[...new Set(all.flatMap(g=>g.ids))];document.querySelector('#count').textContent=ids.length;
   const group=all.find(g=>g.label===selectedGroup);
   if(!group){
@@ -66,7 +54,7 @@
    head.append(back,node('h2','',title(group.label)),node('span','',group.ids.length));
    const area=node('div','catalog-products-area'),products=node('div','catalog-products');area.tabIndex=0;area.setAttribute('role','region');area.setAttribute('aria-label','차량 목록 스크롤');products.dataset.single=String(group.ids.length===1);
    for(const id of group.ids){const car=D.cars[id],card=node('article','catalog-card'),photo=node('div','catalog-photo'),caption=node('h3','catalog-caption',car.name),info=node('p','catalog-info',carDetails(CARDS.find(c=>c.id===id)));card.dataset.car=id;photo.append(art(car));card.append(photo,caption,info);products.append(card);}
-   area.append(products);pane.append(head,area);disposeCarousel=carousel(area,products,group.ids);
+   area.append(products);pane.append(head,area);disposeLayout=fitProducts(area,products);
    if('IntersectionObserver' in window){observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)load(entry.target);}),{root:area,rootMargin:'200px'});products.querySelectorAll('.catalog-card').forEach(c=>observer.observe(c));}
    else products.querySelectorAll('.catalog-card').forEach(load);
   }
