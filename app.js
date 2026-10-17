@@ -97,16 +97,15 @@ function draw(){frame=0;let moving=false;for(const k of ['t','x','y']){if(Math.a
  const g=geometry(camera.t),ps=positions(g),names=g.narrow?camera.t>=.44:g.pitch>=g.h+30,info=g.narrow?camera.t>=.68:camera.t>=.8;
  if(selectionCentered&&lockedId!==null&&Math.abs(camera.t-target.t)>.0001){const pinned=ps.get(lockedId);if(pinned){camera.x=W/2-pinned.x;camera.y=H/2-pinned.y;}}
  scene.dataset.zoom=camera.t.toFixed(4);scene.dataset.center=String(lockedId??'');scene.dataset.sort=mode;
- const shownGroups=new Set();
  for(const i of items){const p=ps.get(i.c.id),x=p.x+camera.x,y=p.y+camera.y-g.h/2,visible=x+p.v/2>0&&x-p.v/2<W&&y+g.h>0&&y<H;i.el.hidden=!visible;if(!visible)continue;
  const quality=p.v*Math.min(window.devicePixelRatio||1,2)>440?'detail':'small';if(i.quality!==quality&&i.quality!=='detail'){i.im.setAttribute('href','assets/'+quality+'/car-'+i.c.id+'.webp');i.quality=quality;}
  i.el.style.cssText=`left:${x-p.v/2}px;top:${y}px;width:${p.v}px;height:${g.h}px;--art-height:${g.h}px`;
 
  i.label.textContent=camera.t>.95?i.c.name:i.c.name.replace(/\s*\([^)]*\)/g,'').replace(i.c.brand,'').trim();i.caption.hidden=!names;i.caption.style.cssText=`top:${g.h+9}px;font-size:${camera.t>.95?14:clamp(8+camera.t*4,8,12)}px`;
- const showTitle=(mode==='parking'||camera.t>=.1||p.v>=110)&&!shownGroups.has(i.groupKey);
- i.tag.hidden=!showTitle;i.tag.textContent=i.groupTitle;i.tag.className='explore-tag '+(mode==='brand'?'brand-tag':'parking-tag');
- i.tag.style.cssText='left:'+Math.max(0,12-(x-p.v/2))+'px;top:'+Math.max(0,12-y)+'px;bottom:auto;transform:translateY(-50%);width:max-content;max-width:'+Math.min(340,W-24)+'px;font-size:'+(camera.t>.95?14:clamp(8+camera.t*4,8,12))+'px;font-weight:700;white-space:nowrap;';
- if(showTitle)shownGroups.add(i.groupKey);
+ const showTitle=camera.t>=.1&&Boolean(i.heading);
+ i.tag.hidden=!showTitle;i.tag.textContent=i.heading;i.tag.className='explore-tag '+(mode==='brand'?'brand-tag':'parking-tag');
+ i.tag.style.cssText='left:0;top:0;bottom:auto;transform:translateY(-50%);width:max-content;max-width:'+Math.min(340,W-24)+'px;font-size:'+(camera.t>.95?14:clamp(8+camera.t*4,8,12))+'px;font-weight:700;white-space:nowrap;';
+
  i.info.hidden=!info;i.info.textContent=i.category||(mode==='brand'?labelBrand(i.c.id):i.c.style);
  i.el.setAttribute('aria-current',String(i.c.id===lockedId));
  }
