@@ -20,6 +20,12 @@ const labelBrand=id=>D.cars[id].name.includes('마이바흐')?'마이바흐':D.c
 function makeRow(ids,row){const designTitle=designState&&row>=4?'Just by Design - '+(row<5?'Modern':'Classic'):'';if(designTitle)return{row,tier:'',designTitle,groups:[{label:designTitle,cars:[...ids]}]};const groups=[];for(const id of ids){const label=labelBrand(id),last=groups.at(-1);if(last?.label===label)last.cars.push(id);else groups.push({label,cars:[id]});}return{row,tier:'',groups};}
 function brandRows(){return(designState?designLayout:allBrandLayout).map(makeRow);}
 const CARDS=Object.values(D.cars).map(c=>({...c,style:D.parking.find(g=>g.cars.includes(c.id)).label}));
+function carDetails(car){
+ const parkingLabel=({34:'도심형 SUV',26:'오프로더 SUV',17:'픽업트럭+SUV'})[car.id]||car.style;
+ const designRow=designLayout.findIndex(ids=>ids.includes(car.id));
+ const designLabel=designRow>=4?'Just by Design - '+(designRow===4?'Modern':'Classic'):'';
+ return[parkingLabel,labelBrand(car.id),designLabel].filter(Boolean).join(' · ');
+}
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t;
 const viewport=$('#viewport'),scene=$('#scene');
 let sort='style',rows=[],items=[],W=0,H=0,lockedId=8,frame=0,numberByCount=false,gesture=null,lastTap=0,resizeTimer,opening=true,openingPair=false;
@@ -106,7 +112,7 @@ function draw(){frame=0;let moving=false;for(const k of ['t','x','y']){if(Math.a
  i.tag.hidden=!showTitle;i.tag.textContent=i.heading;i.tag.className='explore-tag '+(mode==='brand'?'brand-tag':'parking-tag');
  i.tag.style.cssText='left:0;top:0;bottom:auto;transform:translateY(-50%);width:max-content;max-width:'+Math.min(340,W-24)+'px;font-size:'+(camera.t>.95?14:clamp(8+camera.t*4,8,12))+'px;font-weight:700;white-space:nowrap;';
 
- i.info.hidden=!info;i.info.textContent=i.category||(mode==='brand'?labelBrand(i.c.id):i.c.style);
+ i.info.hidden=!info;i.info.textContent=carDetails(i.c);
  i.el.setAttribute('aria-current',String(i.c.id===lockedId));
  }
  if(moving)wake();
