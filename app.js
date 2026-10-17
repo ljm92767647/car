@@ -24,7 +24,7 @@ function carDetails(car){
  const parkingLabel=({34:'도심형 SUV',26:'오프로더 SUV',17:'픽업트럭+SUV'})[car.id]||car.style;
  const designRow=designLayout.findIndex(ids=>ids.includes(car.id));
  const designLabel=designRow>=4?'Just by Design - '+(designRow===4?'Modern':'Classic'):'';
- return[parkingLabel,labelBrand(car.id),designLabel].filter(Boolean).join(' · ');
+ return[labelBrand(car.id),designLabel,parkingLabel].filter(Boolean).join(' · ');
 }
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t;
 const viewport=$('#viewport'),scene=$('#scene');
@@ -100,7 +100,7 @@ function focus(c){const ps=positions(geometry(c.t)),p=ps.get(lockedId);if(!p)ret
 function bound(c){if(selectionCentered&&lockedId!==null)return;const g=geometry(c.t),ps=[...positions(g).values()],edge=24;const left=Math.min(...ps.map(p=>p.x-p.w/2)),right=Math.max(...ps.map(p=>p.x+p.w/2));c.x=right-left<W?0:clamp(c.x,W-right-edge,-left+edge);const ys=ps.map(p=>p.y);c.y=clamp(c.y,-Math.max(...ys)+H/2-24,-Math.min(...ys)+H/2);}
 function wake(){if(!frame)frame=requestAnimationFrame(draw);}
 function draw(){frame=0;let moving=false;for(const k of ['t','x','y']){if(Math.abs(camera[k]-target[k])>(k==='t'?.0001:.1))moving=true;camera[k]+=(target[k]-camera[k])*(matchMedia('(prefers-reduced-motion:reduce)').matches?1:.24)}if(!moving)Object.assign(camera,target);
- const g=geometry(camera.t),ps=positions(g),names=g.narrow?camera.t>=.44:g.pitch>=g.h+30,info=g.narrow?camera.t>=.68:camera.t>=.8;
+ const g=geometry(camera.t),ps=positions(g),names=g.narrow?camera.t>=.44:g.pitch>=g.h+30,info=camera.t>=.8||(g.h*2.3>=W*.34&&g.gap>=W*.2&&g.pitch>=H*.38);
  if(selectionCentered&&lockedId!==null&&Math.abs(camera.t-target.t)>.0001){const pinned=ps.get(lockedId);if(pinned){camera.x=W/2-pinned.x;camera.y=H/2-pinned.y;}}
  scene.dataset.zoom=camera.t.toFixed(4);scene.dataset.center=String(lockedId??'');scene.dataset.sort=mode;
  for(const i of items){const p=ps.get(i.c.id),x=p.x+camera.x,y=p.y+camera.y-g.h/2,visible=x+p.v/2>0&&x-p.v/2<W&&y+g.h>0&&y<H;i.el.hidden=!visible;if(!visible)continue;
@@ -125,7 +125,7 @@ viewport.addEventListener('pointerdown',e=>{if(e.button!==0)return;openingPair=f
 viewport.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)||!gesture)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()];if(gesture.distance)setZoom(gesture.t+Math.log(Math.hypot(a.x-b.x,a.y-b.y)/gesture.distance)*(W<=760?.75:.45),false);gesture.moved=true}else{const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;if(Math.hypot(dx,dy)>5)gesture.moved=true;if(gesture.moved){lockedId=null;selectionCentered=false;target.x=gesture.ox+dx;target.y=gesture.oy+dy;bound(target);wake()}}});
 function release(e){if(gesture&&!gesture.moved&&gesture.id){lockedId=gesture.id;selectionCentered=true;focus(target);if(Date.now()-lastTap<330)setZoom(1,false);lastTap=Date.now();wake()}pointers.delete(e.pointerId);gesture=null;viewport.classList.remove('dragging')}
 viewport.addEventListener('pointerup',release);viewport.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);gesture=null;viewport.classList.remove('dragging')});
-document.querySelectorAll('button[data-mode]').forEach(b=>b.onclick=()=>{openingPair=false;mode=b.dataset.mode;sort=mode;build()});
+document.querySelectorAll('button[data-mode]').forEach(b=>b.onclick=()=>{openingPair=false;mode=b.dataset.mode;if(mode==='brand')designState=1;sort=mode;build()});
 $('#classic-toggle').onclick=()=>{designState=designState?0:1;openingPair=false;build()};
 
 document.addEventListener('keydown',e=>{if($('#numbers').open||$('#rank-dialog').open||e.ctrlKey||e.metaKey||e.altKey)return;if(['+','=','-','Escape','Home'].includes(e.key)){e.preventDefault();if(e.key==='Home'||e.key==='Escape')selectionCentered=false;setZoom(e.key==='-'?target.t-.07:e.key==='Escape'||e.key==='Home'?0:target.t+.07)}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const current=items.find(i=>i.c.id===lockedId)||items[0],ps=positions(geometry(target.t)),p=ps.get(current.c.id),vertical=['ArrowUp','ArrowDown'].includes(e.key),dir=['ArrowLeft','ArrowUp'].includes(e.key)?-1:1;const cs=items.filter(i=>vertical?(i.row-current.row)*dir>0:i.row===current.row&&(ps.get(i.c.id).x-p.x)*dir>0);cs.sort((a,b)=>vertical?Math.abs(a.row-current.row)*W+Math.abs(ps.get(a.c.id).x-p.x)-Math.abs(b.row-current.row)*W-Math.abs(ps.get(b.c.id).x-p.x):Math.abs(ps.get(a.c.id).x-p.x)-Math.abs(ps.get(b.c.id).x-p.x));if(cs[0]){lockedId=cs[0].c.id;selectionCentered=true;focus(target);bound(target);wake()}}});
