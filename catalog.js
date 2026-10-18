@@ -2,6 +2,7 @@
 (()=>{
  'use strict';
  let presentation='list',selectedGroup=null,observer=null,disposeLayout=()=>{};
+ const designByPresentation={list:0,free:1};
  const pane=document.querySelector('#catalog-pane');
  const brands={'부가티':'Bugatti','롤스로이스':'Rolls-Royce','벤틀리':'Bentley','마이바흐':'Mercedes-Maybach','페라리':'Ferrari','람보르기니':'Lamborghini','맥라렌':'McLaren','애스턴 마틴':'Aston Martin','포르쉐':'Porsche','메르세데스 벤츠':'Mercedes-Benz','BMW':'BMW','아우디':'Audi','레인지로버':'Range Rover','마세라티':'Maserati','렉서스':'Lexus','테슬라':'Tesla','재규어':'Jaguar','쉐보레':'Chevrolet','포드':'Ford','알파 로메오':'Alfa Romeo','캐딜락':'Cadillac','링컨':'Lincoln'};
  const title=label=>mode==='brand'?(brands[label]||label):label;
@@ -30,12 +31,13 @@
    if(matchMedia('(max-width:760px)').matches){products.style.cssText='';return;}
    const width=area.clientWidth,height=area.clientHeight,gap=10,n=cards.length;
    const minimum=Math.min(360,Math.max(64,(height-76)*1.85));
-   const rows=n>1&&(width-gap*(n-1))/n<minimum?2:1,columns=Math.ceil(n/rows);
+   const columns=n>4?4:n>1&&(width-gap*(n-1))/n<minimum?Math.ceil(n/2):n;
+   const rows=Math.ceil(n/columns),sizingRows=Math.min(rows,2);
    let cardWidth=Math.min(n===1?840:640,(width-gap*(columns-1))/columns);
    for(let attempt=0;attempt<3;attempt++){
     products.style.setProperty('--catalog-columns',columns);products.style.setProperty('--catalog-card-width',Math.max(64,cardWidth)+'px');
     const caption=Math.max(...cards.map(c=>c.querySelector('.catalog-caption').getBoundingClientRect().height+c.querySelector('.catalog-info').getBoundingClientRect().height+12));
-    cardWidth=Math.min(cardWidth,Math.max(64,((height-28-gap*(rows-1))/rows-caption)*1.85));
+    cardWidth=Math.min(cardWidth,Math.max(64,((height-28-gap*(sizingRows-1))/sizingRows-caption)*1.85));
    }
    products.style.setProperty('--catalog-card-width',cardWidth+'px');products.dataset.rows=String(rows);
   }
@@ -61,14 +63,18 @@
   pane.scrollTop=0;
  }
  function setPresentation(next){
-  if(next===presentation)return;presentation=next;document.body.dataset.presentation=next;
+  if(next===presentation)return;
+  if(mode==='brand')designByPresentation[presentation]=designState;
+  const nextDesign=mode==='brand'?designByPresentation[next]:designState,designChanged=designState!==nextDesign;
+  presentation=next;document.body.dataset.presentation=next;designState=nextDesign;
+  if(designChanged&&mode==='brand')build();
   viewport.inert=next==='list';viewport.setAttribute('aria-hidden',String(next==='list'));
   document.querySelectorAll('[data-presentation-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.presentationButton===next)));
   if(next==='list')render();
-  // The free viewport stays laid out; do not rebuild, reset, focus or resize its camera here.
+  // Keep the camera intact unless the two presentations use different brand arrangements.
  }
  document.querySelectorAll('[data-presentation-button]').forEach(b=>b.onclick=()=>setPresentation(b.dataset.presentationButton));
- for(const button of [...document.querySelectorAll('button[data-mode]'),document.querySelector('#classic-toggle')]){const original=button.onclick;button.onclick=()=>{original();selectedGroup=null;render();};}
+ for(const button of [...document.querySelectorAll('button[data-mode]'),document.querySelector('#classic-toggle')]){const original=button.onclick;button.onclick=()=>{original();if(presentation==='list'&&button.dataset.mode==='brand'&&designState!==0){designState=0;build();}if(mode==='brand')designByPresentation[presentation]=designState;selectedGroup=null;render();};}
  pane.addEventListener('click',event=>{const entry=event.target.closest('[data-group]');if(entry){selectedGroup=entry.dataset.group;render();pane.querySelector('#catalog-back')?.focus({preventScroll:true});}else if(event.target.closest('#catalog-back')){const previous=selectedGroup;selectedGroup=null;render();[...pane.querySelectorAll('[data-group]')].find(b=>b.dataset.group===previous)?.focus({preventScroll:true});}});
  viewport.inert=true;viewport.setAttribute('aria-hidden','true');render();
 })();
