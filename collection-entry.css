@@ -1,0 +1,42 @@
+@font-face{font-family:'Collection Entry Serif';src:url('https://ljm92767647.github.io/SOCCER/assets/fonts/dm-serif-display.ttf') format('truetype');font-weight:400;font-display:swap}
+.collection-collection-carousel{--card-width:min(540px,calc(100vw - 120px));--card-gap:max(56px,calc(50vw - var(--card-width)));--edge-fade:min(24vw,calc((100vw - var(--card-width))/2 - 20px));position:absolute;inset:0;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none}
+.collection-collection-carousel:focus-visible{outline:none}.collection-collection-carousel:focus-visible .collection-choice.is-current{outline:2px solid #458cca;outline-offset:9px}
+.collection-window{position:absolute;inset:0;display:flex;align-items:center;overflow:hidden;perspective:1400px;mask-image:linear-gradient(90deg,transparent,#000 var(--edge-fade),#000 calc(100% - var(--edge-fade)),transparent)}
+.collection-track{display:flex;align-items:center;gap:var(--card-gap);width:max-content;padding-inline:calc((100vw - var(--card-width))/2);transform:translate3d(calc(var(--active) * (var(--card-width) + var(--card-gap)) * -1 + var(--drag-x)),0,0);transition:transform .65s cubic-bezier(.22,.85,.22,1);will-change:transform}
+.collection-choice{position:relative;flex:0 0 var(--card-width);width:var(--card-width);height:360px;display:grid;place-items:center;padding:38px;border:0;border-radius:36px;background:transparent;isolation:isolate;opacity:.42;transform:scale(.87) rotateY(calc(var(--side) * -9deg));transition:transform .65s cubic-bezier(.22,.85,.22,1),opacity .5s;cursor:grab;-webkit-tap-highlight-color:transparent}
+.collection-choice.is-current{opacity:1;transform:scale(1) rotateY(0)}
+.collection-choice:hover{background:transparent;color:inherit}.collection-choice:active{cursor:grabbing}
+.collection-choice::after{content:'';position:absolute;z-index:-2;left:13%;right:13%;bottom:-24px;height:34px;border-radius:50%;background:#7eabc330;filter:blur(20px);transform:scaleY(.62);pointer-events:none}
+.collection-glass{position:absolute;z-index:-1;inset:0;overflow:hidden;border-radius:inherit;border:1px solid #ffffffd9;background:radial-gradient(ellipse at var(--light-x,28%) var(--light-y,12%),#ffffff91 0%,#ffffff19 50%,transparent 75%),linear-gradient(132deg,#ffffff75 0%,#ffffff25 32%,#c9dfef33 68%,#ffffff7d 100%);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);box-shadow:inset 0 2px 2px #fffffff2,inset 2px 0 3px #ffffff91,inset -2px -1px 4px #79a9c63d,inset 0 -2px 3px #91bad54d,0 29px 48px -24px #527c9b52,0 9px 15px -11px #345a7466}
+.collection-glass::before{content:'';position:absolute;inset:2px;border-radius:34px;border:1px solid #c3dce73d;box-shadow:inset 0 0 15px #e5f4ff26;pointer-events:none}
+.collection-glint{position:absolute;top:-40%;left:4%;height:180%;width:34%;transform:rotate(31deg);background:linear-gradient(90deg,transparent,#ffffff00 10%,#ffffff57 49%,#ffffff0d 54%,transparent 88%);filter:blur(3px);opacity:.65}
+.collection-rim{position:absolute;inset:0;border-radius:inherit;padding:2px;background:linear-gradient(135deg,#fffffff5,transparent 31%,#ffffff1a 50%,#b0d0e247 74%,#ffffffe6);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none}
+.collection-caustic{position:absolute;left:17%;right:11%;height:15px;bottom:-7px;border-radius:50%;background:#8cb7d845;filter:blur(7px)}
+.collection-choice-title{position:relative;font-family:'DM Serif Display',Georgia,serif;font-size:clamp(34px,4.6vw,56px);font-weight:400;line-height:1.15;letter-spacing:-.035em;text-align:center;color:#365f7d;text-shadow:0 1px 1px #ffffffed;pointer-events:none}
+.collection-arrow{position:absolute;z-index:3;top:50%;width:48px;height:56px;display:grid;place-items:center;transform:translateY(-50%);padding:10px;border-radius:50%;color:#7397b0;background:transparent;touch-action:manipulation}
+.collection-prev{left:calc((100vw - var(--card-width))/2 - 76px)}.collection-next{right:calc((100vw - var(--card-width))/2 - 76px)}
+.collection-arrow svg{width:28px;height:28px}.collection-arrow path{stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}.collection-arrow:hover:not(:disabled){color:#286b9f;background:#e0edf54d}.collection-arrow:disabled{opacity:.22;cursor:default}
+.collection-announcement{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.collection-collection-carousel.is-dragging,.collection-collection-carousel.is-dragging .collection-choice{cursor:grabbing}.collection-collection-carousel.is-dragging .collection-track{transition:none}
+@media(max-width:700px){.collection-collection-carousel{--card-width:calc(100vw - 112px);--card-gap:22px}.collection-choice{height:310px;min-width:0;padding:25px 19px;border-radius:29px;transform:scale(.87);backface-visibility:hidden}.collection-choice.is-current{transform:scale(1)}.collection-glass{z-index:0;backdrop-filter:none;-webkit-backdrop-filter:none}.collection-rim{padding:0;background:none;mask:none;mask-composite:add;border:1px solid #ffffffb3;box-shadow:inset 1px 1px 2px #ffffff91,inset -1px -1px 2px #b0d0e247}.collection-glass::before{border-radius:27px}.collection-choice-title{z-index:1;min-width:0;max-width:100%;font-size:clamp(29px,8.5vw,42px)}.collection-prev{left:9px}.collection-next{right:9px}.collection-arrow{width:40px;height:48px;padding:8px}.collection-window{perspective:none;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}}
+@media(max-height:500px){.collection-choice{height:min(280px,65svh)}.collection-choice-title{font-size:36px}}
+@media(prefers-reduced-motion:reduce){.collection-track,.collection-choice{transition:none}}
+
+#collection-entry{--card-width:min(540px,calc(100vw - 120px));--card-gap:max(56px,calc(50vw - var(--card-width)));--edge-fade:min(24vw,calc((100vw - var(--card-width))/2 - 20px));--active:0;--drag-x:0px;position:absolute;inset:0;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none;z-index:3}
+#collection-entry[hidden],#collection-entry-back[hidden]{display:none!important}
+body[data-presentation=free] #collection-entry,body[data-presentation=free] #collection-entry-back{display:none!important}
+.collection-entry-hidden{visibility:hidden!important;pointer-events:none!important}
+#catalog-pane.collection-entry-directory{padding-top:64px}
+#collection-entry-back{position:absolute;z-index:4;left:12px;top:8px;width:56px;height:48px;border:0;background:none;color:#374149;padding:0;display:flex;align-items:center;justify-content:flex-start}
+#collection-entry-back svg{width:36px;height:28px}
+#collection-entry button{font-family:inherit}
+#collection-entry .collection-choice{box-sizing:border-box;font:inherit;box-shadow:none;text-shadow:none;white-space:normal;overflow:visible;min-height:0;text-decoration:none}
+#collection-entry .collection-choice-title{font-family:'Collection Entry Serif',Georgia,serif}
+#collection-entry .collection-arrow{border:0;min-height:44px;box-shadow:none}
+#collection-entry .collection-choice:focus-visible,#collection-entry .collection-arrow:focus-visible,#collection-entry-back:focus-visible{outline:2px solid #458cca;outline-offset:6px}
+#collection-entry.is-dragging,#collection-entry.is-dragging .collection-choice{cursor:grabbing}
+#collection-entry.is-dragging .collection-track{transition:none}
+body[data-presentation=list] header #classification,body[data-presentation=list][data-entry-site=watches] header nav[aria-label="분류 기준"],body[data-presentation=list][data-entry-site=cars] header nav[aria-label="차량 분류"]{display:none!important}
+@media(max-width:700px){#collection-entry{--card-width:calc(100vw - 112px);--card-gap:22px}.collection-choice{height:min(310px,60svh)}}
+@media(max-height:500px){#collection-entry .collection-choice{height:min(250px,65svh)}}
+
