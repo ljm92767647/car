@@ -7,7 +7,7 @@
  pane.parentElement.append(root,back);
  let home=true,active=0,daily=false,navigating=false,choices=[],wheelAt=0,wheelTotal=0,start=null,dragged=false;
  const button=(selector)=>document.querySelector(selector);
- const choice=(title,selector)=>({title,run:()=>button(selector)?.click()});
+ const choice=(title,selector)=>({title,selector,run:()=>button(selector)?.click()});
  function options(){
   if(site==='pens'&&daily)return ['Ballpoint Pen','Multi Pen','Mechanical Pencil'].map(title=>({title,run:()=>{
    button('[data-section="daily"]').click();
@@ -21,6 +21,10 @@
   root.querySelectorAll('.collection-choice').forEach((card,i)=>{card.classList.toggle('is-current',i===active);card.style.setProperty('--side',Math.sign(i-active));card.setAttribute('aria-current',String(i===active));card.tabIndex=i===active?0:-1;});
   root.querySelector('.collection-prev').disabled=active===0;root.querySelector('.collection-next').disabled=active===choices.length-1;
   root.querySelector('.collection-announcement').textContent=`${choices[active].title}, ${active+1} / ${choices.length}`;
+  const selected=choices[active];
+  if(document.body.dataset.presentation==='list'&&selected.selector&&button(selected.selector)?.getAttribute('aria-pressed')!=='true'){
+   navigating=true;selected.run();navigating=false;
+  }
  }
  function render(){
   choices=options();active=Math.min(active,choices.length-1);
@@ -59,8 +63,10 @@
   }else if(e.key==='Enter'&&(e.target===root||e.target.closest('.collection-choice'))){e.preventDefault();e.stopImmediatePropagation();enter();}
  },true);
  document.addEventListener('click',e=>{
-  if(navigating||site!=='pens'||document.body.dataset.presentation!=='list')return;
-  const collection=e.target.closest('header [data-section]');if(collection){daily=collection.dataset.section==='daily';active=0;home=true;render();}
+  if(navigating||document.body.dataset.presentation!=='list')return;
+  const collection=site==='pens'&&e.target.closest('header [data-section]');if(collection){daily=collection.dataset.section==='daily';active=0;home=true;render();return;}
+  const index=choices.findIndex(c=>c.selector&&e.target.closest(c.selector));
+  if(index>=0){active=index;paint();}
  });
  // Daily categories lead straight to products; their back arrow returns to the three cards.
  pane.addEventListener('click',e=>{if(site==='pens'&&daily&&e.target.closest('#catalog-back')){e.preventDefault();e.stopImmediatePropagation();showHome();}},true);

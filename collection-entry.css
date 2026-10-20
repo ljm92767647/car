@@ -36,7 +36,9 @@ body[data-presentation=free] #collection-entry,body[data-presentation=free] #col
 #collection-entry .collection-choice:focus-visible,#collection-entry .collection-arrow:focus-visible,#collection-entry-back:focus-visible{outline:2px solid #458cca;outline-offset:6px}
 #collection-entry.is-dragging,#collection-entry.is-dragging .collection-choice{cursor:grabbing}
 #collection-entry.is-dragging .collection-track{transition:none}
-body[data-presentation=list] header #classification,body[data-presentation=list][data-entry-site=watches] header nav[aria-label="분류 기준"],body[data-presentation=list][data-entry-site=cars] header nav[aria-label="차량 분류"]{display:none!important}
+.collection-glass{border-color:#ffffffd9;background:radial-gradient(ellipse at var(--light-x,28%) var(--light-y,12%),#ffffff91 0%,#e7e3e019 50%,transparent 75%),linear-gradient(132deg,#ffffff75 0%,#e7e3e060 32%,#d8d1ca66 68%,#ffffff7d 100%);box-shadow:inset 0 2px 2px #fffffff2,inset 2px 0 3px #ffffff91,inset -2px -1px 4px #b1a59a3d,inset 0 -2px 3px #beb2a74d,0 29px 48px -24px #84776c52,0 9px 15px -11px #73665a66}
+.collection-glass::before{border-color:#d8d0c83d;box-shadow:inset 0 0 15px #f2ebe426}.collection-caustic{background:#b6a99b45}.collection-choice::after{background:#a99b8c30}
+.collection-choice-title{color:#665d55}.collection-arrow{color:#9b8d80}.collection-arrow:hover:not(:disabled){color:#665d55;background:#e7e3e04d}
 @media(max-width:700px){#collection-entry{--card-width:calc(100vw - 112px);--card-gap:22px}.collection-choice{height:min(310px,60svh)}}
 @media(max-height:500px){#collection-entry .collection-choice{height:min(250px,65svh)}}
 
