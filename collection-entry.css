@@ -42,3 +42,6 @@ body[data-presentation=free] #collection-entry,body[data-presentation=free] #col
 @media(max-width:700px){#collection-entry{--card-width:calc(100vw - 112px);--card-gap:22px}.collection-choice{height:min(310px,60svh)}}
 @media(max-height:500px){#collection-entry .collection-choice{height:min(250px,65svh)}}
 
+
+/* Match the entry card typeface; retain title size and all other settings. */
+body header h1{font-family:'Collection Entry Serif',Georgia,serif}
