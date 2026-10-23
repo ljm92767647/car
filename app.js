@@ -6,14 +6,14 @@ const allBrandLayout=[
  [9,6,20,35,15],
  [31,29,2,8],
  [27,23,28,24],
- [36,1,11,21,32,26],
+ [1,11,21,32,26],
  [33,12,22,34,10,3],
  [16,17,4,19,18,7],
  [25,30,14,5,13]
 ];
 const designLayout=[
- [9,6,35,15],[31,8,27,28],[1,32,33,22],[34,10,3,16,7],
- [29,2,23,36,11,26,12,17],
+ [9,6,35,15],[31,8,27,28],[32,33,22],[34,10,3,16,7],
+ [29,2,23,1,11,26,12,17],
  [20,24,21,4,19,18],[25,30,14,5,13]
 ];
 const labelBrand=id=>D.cars[id].name.includes('마이바흐')?'마이바흐':D.cars[id].brand;
@@ -142,5 +142,6 @@ window.CarExplorer={zoom:t=>setZoom(t,false),select(id){if(!items.some(i=>i.c.id
 function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;} const ownedCounts=new Map();Object.values(D.cars).forEach(c=>{const label=c.name.includes('마이바흐')?'마이바흐':c.brand;ownedCounts.set(label,(ownedCounts.get(label)||0)+1);});
 const countKey=brand=>brand==='벤츠'?'메르세데스 벤츠':brand==='레인지 로버'?'레인지로버':brand;
 const dlg=$('#rank-dialog');D.hierarchy.forEach(t=>{const item=el('div','rank-item');item.append(el('strong','',t.tier),el('p','',t.brands));$('#rank-list').append(item);const entries=t.brands.replace(/[()]/g,'').split('/').map(b=>b.trim()).map(brand=>({brand,count:ownedCounts.get(countKey(brand))||0})).filter(b=>b.count>0);if(entries.length){const block=el('section','owned-tier'),list=el('div','owned-brands');block.append(el('h4','',t.tier));entries.forEach(({brand,count})=>{const n=el('div','owned-brand');n.dataset.brand=brand;n.dataset.count=count;n.append(el('span','',brand),el('strong','',count+'대'));list.append(n);});block.append(list);$('#owned-list').append(block);}});$('#rank').onclick=()=>dlg.showModal();$('#close-rank').onclick=()=>dlg.close();dlg.addEventListener('click',e=>{if(e.target===dlg){const r=dlg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dlg.close();}});
+
 
 
