@@ -82,3 +82,8 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 @media(max-width:760px){#collection-entry{--menu-gap-two:clamp(52px,12vh,96px)}#collection-entry .collection-choice-title{font-size:clamp(28px,7.6vw,36px)}}
 @media(max-height:500px){#collection-entry{--menu-gap-two:24px}#collection-entry .collection-choice-title{font-size:26px}}
 
+
+/* Fine bevel highlights keep the letter contours sharp, with only a close soft shadow. */
+#collection-entry .collection-choice-title{text-shadow:-.35px -.65px 0 #fffffff5,.35px .65px 0 #c4b6a6,0 1.2px 0 #695b4b29,0 2px 2px #493c3014;-webkit-text-stroke:.15px #5b51451f}
+#collection-entry:has(>.collection-choice:nth-child(2)):not(:has(>.collection-choice:nth-child(3))){gap:calc(var(--menu-gap-two)*1.5)}
+
