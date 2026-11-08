@@ -73,3 +73,12 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 @media(max-width:760px){#collection-entry{--menu-gap-two:clamp(104px,24vh,192px);--menu-gap-four:clamp(54px,12.15vh,102.6px)}}
 @media(max-height:500px){#collection-entry{--menu-gap-two:48px;--menu-gap-four:27px}}
 
+
+/* Center the longest line, align every dash, and keep text edges crisp. */
+#collection-entry{display:grid;grid-template-columns:max-content;justify-content:center;align-content:center;justify-items:stretch;align-items:center;--menu-gap-two:clamp(52px,12vh,128px);gap:var(--menu-gap-two)}
+#collection-entry:has(>.collection-choice:nth-child(3)):not(:has(>.collection-choice:nth-child(4))){gap:var(--menu-gap-two)}
+#collection-entry .collection-choice{width:100%;text-align:left}
+#collection-entry .collection-choice-title{width:100%;font-size:clamp(31px,3.6vw,49px);text-align:left;text-shadow:0 -1px 0 #fffffff2,0 1px 1px #62554b14}
+@media(max-width:760px){#collection-entry{--menu-gap-two:clamp(52px,12vh,96px)}#collection-entry .collection-choice-title{font-size:clamp(28px,7.6vw,36px)}}
+@media(max-height:500px){#collection-entry{--menu-gap-two:24px}#collection-entry .collection-choice-title{font-size:26px}}
+
