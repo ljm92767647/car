@@ -45,3 +45,14 @@ body[data-presentation=free] #collection-entry,body[data-presentation=free] #col
 
 /* Match the entry card typeface; retain title size and all other settings. */
 body header h1{font-family:'Collection Entry Serif',Georgia,serif}
+
+/* All list-entry options visible together; no carousel, boxes, underlines or numbering. */
+#collection-entry{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(26px,6vh,64px);padding:24px 16px;overflow:auto;touch-action:pan-y;user-select:auto}
+#collection-entry .collection-choice{position:relative;display:block;flex:none;width:auto;max-width:100%;height:auto;min-height:44px;padding:6px 0;border:0;border-radius:0;background:none;box-shadow:none;transform:none;opacity:1;cursor:pointer;text-decoration:none;transition:color .15s}
+#collection-entry .collection-choice::after{content:none}
+#collection-entry .collection-choice-title{display:block;font-family:'Collection Entry Serif',Georgia,serif;font-size:clamp(28px,3.4vw,46px);font-weight:400;line-height:1.2;letter-spacing:-.035em;text-align:center;color:#665d55;text-shadow:none;overflow-wrap:normal}
+#collection-entry .collection-choice:hover .collection-choice-title{color:#302b27}
+#collection-entry .collection-choice:hover{text-decoration:none;background:none}
+#collection-entry .collection-choice:focus-visible{outline:2px solid #a2988f;outline-offset:8px}
+@media(max-width:760px){#collection-entry{gap:clamp(26px,6vh,48px);padding:24px 12px}#collection-entry .collection-choice-title{font-size:clamp(26px,7.2vw,34px)}}
+@media(max-height:500px){#collection-entry{gap:12px;padding:12px}#collection-entry .collection-choice{min-height:36px;padding:3px 0}#collection-entry .collection-choice-title{font-size:24px}}
