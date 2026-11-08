@@ -56,3 +56,12 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry .collection-choice:focus-visible{outline:2px solid #a2988f;outline-offset:8px}
 @media(max-width:760px){#collection-entry{gap:clamp(26px,6vh,48px);padding:24px 12px}#collection-entry .collection-choice-title{font-size:clamp(26px,7.2vw,34px)}}
 @media(max-height:500px){#collection-entry{gap:12px;padding:12px}#collection-entry .collection-choice{min-height:36px;padding:3px 0}#collection-entry .collection-choice-title{font-size:24px}}
+
+/* Spacious, softly raised text for the list-entry menus only. */
+#collection-entry{gap:clamp(52px,12vh,128px)}
+#collection-entry[data-menu=types]{gap:clamp(42px,9.6vh,102px)}
+#collection-entry .collection-choice-title::before{content:'-\00a0'}
+#collection-entry .collection-choice-title{text-shadow:0 -1px 0 #ffffffeb,0 1px 0 #d8cfc7,0 2px 0 #baada2,0 4px 7px #62554b38,0 9px 18px #62554b1c}
+@media(max-width:760px){#collection-entry{gap:clamp(52px,12vh,96px)}#collection-entry[data-menu=types]{gap:clamp(40px,9vh,76px)}}
+@media(max-height:500px){#collection-entry{gap:24px}#collection-entry[data-menu=types]{gap:20px}}
+
