@@ -65,3 +65,11 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 @media(max-width:760px){#collection-entry{gap:clamp(52px,12vh,96px)}#collection-entry[data-menu=types]{gap:clamp(40px,9vh,76px)}}
 @media(max-height:500px){#collection-entry{gap:24px}#collection-entry[data-menu=types]{gap:20px}}
 
+
+/* Two choices: twice the previous gap. Four: +35%. Three: midpoint. */
+#collection-entry{--menu-gap-two:clamp(104px,24vh,256px);--menu-gap-four:clamp(56.7px,12.96vh,137.7px);gap:var(--menu-gap-two)}
+#collection-entry[data-menu=types]{gap:var(--menu-gap-four)}
+#collection-entry:has(>.collection-choice:nth-child(3)):not(:has(>.collection-choice:nth-child(4))){gap:calc((var(--menu-gap-two) + var(--menu-gap-four))/2)}
+@media(max-width:760px){#collection-entry{--menu-gap-two:clamp(104px,24vh,192px);--menu-gap-four:clamp(54px,12.15vh,102.6px)}}
+@media(max-height:500px){#collection-entry{--menu-gap-two:48px;--menu-gap-four:27px}}
+
