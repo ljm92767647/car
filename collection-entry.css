@@ -91,3 +91,11 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 /* Entry labels, including the fountain submenu, use the header title ink. */
 #collection-entry .collection-choice-title,#collection-entry .collection-choice:hover .collection-choice-title{color:#22282d}
 
+
+/* A quiet timeline starts beneath the header and continues to the page bottom. */
+#collection-entry{--timeline-x:33.333333vw;--timeline-label-gap:26px;justify-content:start;padding-left:calc(var(--timeline-x) + var(--timeline-label-gap));padding-right:16px;grid-template-columns:max-content;isolation:isolate}
+#collection-entry::before{content:'';position:absolute;left:var(--timeline-x);top:0;bottom:0;width:1px;background:linear-gradient(to bottom,#22282d00 0,#22282d min(160px,22%),#22282d 100%);pointer-events:none;z-index:-1}
+#collection-entry .collection-choice-title,#collection-entry .collection-choice:hover .collection-choice-title{position:relative;pointer-events:auto;color:#665d55;text-shadow:none;-webkit-text-stroke:0 transparent}
+#collection-entry .collection-choice-title::before{content:'';position:absolute;left:calc(-1 * var(--timeline-label-gap) - 3.5px);top:50%;width:8px;height:8px;border-radius:50%;background:#665d55;transform:translateY(-50%);text-shadow:none}
+@media(max-width:760px){#collection-entry{--timeline-x:clamp(24px,calc(33.333333vw - 40px),92px);--timeline-label-gap:22px;padding-left:calc(var(--timeline-x) + var(--timeline-label-gap));padding-right:12px}}
+
