@@ -87,3 +87,7 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry .collection-choice-title{text-shadow:-.35px -.65px 0 #fffffff5,.35px .65px 0 #c4b6a6,0 1.2px 0 #695b4b29,0 2px 2px #493c3014;-webkit-text-stroke:.15px #5b51451f}
 #collection-entry:has(>.collection-choice:nth-child(2)):not(:has(>.collection-choice:nth-child(3))){gap:calc(var(--menu-gap-two)*1.5)}
 
+
+/* Entry labels, including the fountain submenu, use the header title ink. */
+#collection-entry .collection-choice-title,#collection-entry .collection-choice:hover .collection-choice-title{color:#22282d}
+
