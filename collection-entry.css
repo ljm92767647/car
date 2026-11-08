@@ -99,3 +99,8 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry .collection-choice-title::before{content:'';position:absolute;left:calc(-1 * var(--timeline-label-gap) - 3.5px);top:50%;width:8px;height:8px;border-radius:50%;background:#665d55;transform:translateY(-50%);text-shadow:none}
 @media(max-width:760px){#collection-entry{--timeline-x:clamp(24px,calc(33.333333vw - 40px),92px);--timeline-label-gap:22px;padding-left:calc(var(--timeline-x) + var(--timeline-label-gap));padding-right:12px}}
 
+
+/* Leave real empty space below the bar before the lighter, wider timeline fades in. */
+#collection-entry::before{top:clamp(28px,5vh,48px);width:2px;background:linear-gradient(to bottom,#777d8200 0,#777d82 120px,#777d82 100%)}
+#collection-entry .collection-choice-title::before{left:calc(-1 * var(--timeline-label-gap) - 6px);width:14px;height:14px;background:#665d55;z-index:1}
+
