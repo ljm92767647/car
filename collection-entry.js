@@ -18,6 +18,7 @@
   savedPressed.clear();
  }
  function syncHeader(){
+  if(navigating)return;
   if(document.body.dataset.presentation!=='list'||!home){restoreHeader();return;}
   const selector=classificationButtons+(site==='pens'&&penStage==='types'?',button[data-section]':'');
   header.querySelectorAll(selector).forEach(b=>{
@@ -26,12 +27,17 @@
    if(pressed!=='false')b.setAttribute('aria-pressed','false');
   });
  }
- header.addEventListener('click',e=>{if(e.target.closest(classificationButtons+',button[data-section],button[data-presentation-button]'))restoreHeader();},true);
+ header.addEventListener('click',e=>{
+  const b=e.target.closest(classificationButtons+',button[data-section],button[data-presentation-button]');
+  if(!b)return;
+  if(document.body.dataset.presentation==='list'&&b.matches(classificationButtons))home=false;
+  restoreHeader();
+ },true);
  new MutationObserver(syncHeader).observe(header,{subtree:true,attributes:true,attributeFilter:['aria-pressed']});
  function run(action){restoreHeader();navigating=true;try{action();}finally{navigating=false;}}
  function enterDaily(index){
   daily=true;active=index;penStage='types';
-  run(()=>{button('[data-section="daily"]').click();[...pane.querySelectorAll('.catalog-entry')].find(b=>b.textContent.trim()===dailyTitles[index])?.click();});
+  home=false;run(()=>{button('[data-section="daily"]').click();[...pane.querySelectorAll('.catalog-entry')].find(b=>b.textContent.trim()===dailyTitles[index])?.click();});
   home=false;sync();pane.querySelector('#catalog-back')?.focus({preventScroll:true});
  }
  function fountainMenu(){
@@ -40,7 +46,7 @@
  function options(){
   if(site==='pens'&&penStage==='types')return [...dailyTitles.map((title,i)=>({title,run:()=>enterDaily(i)})),{title:'Fountain Pen',run:fountainMenu}];
   const attr=site==='pens'||site==='cards'?'data-sort':'data-mode';
-  return (site==='cars'?[['By Category','parking'],['By Brand','brand']]:[['By Brand','brand'],['By Style','style'],...(site==='watches'?[['By Color','color']]:[])]).map(([title,value])=>({title,selector:`header [${attr}="${value}"]`,run(){run(()=>button(this.selector)?.click());home=false;sync();(pane.querySelector('#catalog-back')||back).focus({preventScroll:true});}}));
+  return (site==='cars'?[['By Category','parking'],['By Brand','brand']]:[['By Brand','brand'],['By Style','style'],...(site==='watches'?[['By Color','color']]:[])]).map(([title,value])=>({title,selector:`header [${attr}="${value}"]`,run(){home=false;run(()=>button(this.selector)?.click());sync();(pane.querySelector('#catalog-back')||back).focus({preventScroll:true});}}));
  }
  function sync(){
   const list=document.body.dataset.presentation==='list',directory=!!pane.querySelector('.catalog-directory');
