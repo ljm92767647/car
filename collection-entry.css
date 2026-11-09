@@ -136,3 +136,7 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry .collection-sort-label>span:last-child{color:#78492c!important}
 @media(max-width:760px){#collection-entry{--entry-heading-top:18px;--entry-heading-size:clamp(23px,6.8vw,40px)}}
 @media(max-height:500px){#collection-entry{--entry-heading-top:12px;--entry-heading-size:26px}}
+
+/* Keep the entry spacing and remove the timeline rule. */
+#collection-entry::before{content:none}
+#collection-entry[data-menu=types] .collection-sort-label{display:none}
