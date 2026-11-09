@@ -181,3 +181,9 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 @media(max-width:760px){
  #collection-entry:has(>.collection-choice:nth-child(2)):not(:has(>.collection-choice:nth-child(3))){gap:var(--menu-gap-two)}
 }
+
+/* Symmetric margins for the rules beneath each collection choice. */
+#collection-entry[data-menu]{--entry-row-inset:calc(var(--timeline-x) - var(--prefix-inset) - var(--prefix-width));padding-inline:var(--entry-row-inset);grid-template-columns:minmax(0,1fr)}
+#collection-entry[data-menu]:has(>.collection-choice:nth-child(2)):not(:has(>.collection-choice:nth-child(3))){padding-top:calc(var(--heading-end) + clamp(36px,7vh,72px) + clamp(32px,8vh,76px))}
+#collection-entry[data-menu] .collection-choice{position:relative}
+#collection-entry[data-menu] .collection-choice::after,#collection-entry[data-menu] .collection-choice:first-child::after{content:'';position:absolute;inset:auto 0 0;width:auto;height:1px;background:#d3d3d3;border-radius:0;box-shadow:none;transform:none;filter:none;opacity:1;pointer-events:none}
