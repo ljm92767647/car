@@ -10,7 +10,25 @@
  const dailyTitles=['Ballpoint Pen','Multi Pen','Mechanical Pencil'];
  const dailyNav=site==='pens'?document.createElement('nav'):null;
  if(dailyNav){dailyNav.id='daily-classification';dailyNav.setAttribute('aria-label','펜과 샤프 분류');dailyNav.hidden=true;dailyNav.innerHTML=['Ballpoint','Multi','Mecha'].map((label,i)=>`<button data-daily-choice="${i}" aria-pressed="${i===0}">${label}</button>`).join('');button('#classification').after(dailyNav);}
- function run(action){navigating=true;try{action();}finally{navigating=false;}}
+ const header=document.querySelector('header');
+ const savedPressed=new Map();
+ const classificationButtons='button[data-sort],button[data-mode]';
+ function restoreHeader(){
+  for(const [b,pressed] of savedPressed){if(pressed===null)b.removeAttribute('aria-pressed');else b.setAttribute('aria-pressed',pressed);}
+  savedPressed.clear();
+ }
+ function syncHeader(){
+  if(document.body.dataset.presentation!=='list'||!home){restoreHeader();return;}
+  const selector=classificationButtons+(site==='pens'&&penStage==='types'?',button[data-section]':'');
+  header.querySelectorAll(selector).forEach(b=>{
+   const pressed=b.getAttribute('aria-pressed');
+   if(!savedPressed.has(b))savedPressed.set(b,pressed);
+   if(pressed!=='false')b.setAttribute('aria-pressed','false');
+  });
+ }
+ header.addEventListener('click',e=>{if(e.target.closest(classificationButtons+',button[data-section],button[data-presentation-button]'))restoreHeader();},true);
+ new MutationObserver(syncHeader).observe(header,{subtree:true,attributes:true,attributeFilter:['aria-pressed']});
+ function run(action){restoreHeader();navigating=true;try{action();}finally{navigating=false;}}
  function enterDaily(index){
   daily=true;active=index;penStage='types';
   run(()=>{button('[data-section="daily"]').click();[...pane.querySelectorAll('.catalog-entry')].find(b=>b.textContent.trim()===dailyTitles[index])?.click();});
@@ -30,6 +48,7 @@
   root.hidden=!list||!home;root.inert=!list||!home;
   pane.classList.toggle('collection-entry-hidden',list&&home);pane.classList.toggle('collection-entry-directory',list&&!home&&directory);pane.inert=!list||home;
   back.hidden=!list||(home?!(site==='pens'&&penStage==='fountain'):!directory);
+  syncHeader();
  }
  function render(){
   choices=options();root.dataset.menu=site==='pens'?penStage:'classification';

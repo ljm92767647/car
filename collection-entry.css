@@ -1,4 +1,4 @@
-@font-face{font-family:'Collection Entry Serif';src:url('https://ljm92767647.github.io/SOCCER/assets/fonts/dm-serif-display.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Collection Entry Serif';src:url('fonts/collection-dm-serif-display.ttf') format('truetype');font-weight:400;font-display:swap}
 .collection-collection-carousel{--card-width:min(540px,calc(100vw - 120px));--card-gap:max(56px,calc(50vw - var(--card-width)));--edge-fade:min(24vw,calc((100vw - var(--card-width))/2 - 20px));position:absolute;inset:0;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none}
 .collection-collection-carousel:focus-visible{outline:none}.collection-collection-carousel:focus-visible .collection-choice.is-current{outline:2px solid #458cca;outline-offset:9px}
 .collection-window{position:absolute;inset:0;display:flex;align-items:center;overflow:hidden;perspective:1400px;mask-image:linear-gradient(90deg,transparent,#000 var(--edge-fade),#000 calc(100% - var(--edge-fade)),transparent)}
@@ -123,3 +123,6 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 @media(max-width:760px){#collection-entry .collection-sort-label{right:calc(100% + var(--timeline-label-gap) + 7px);font-size:min(clamp(16px,5.5vw,26px),calc((var(--timeline-x) - 10px)/3.3))}#collection-entry .collection-sort-label-middle{font-size:min(clamp(15px,4.6vw,23px),calc((var(--timeline-x) - 12px)/7.3))}}
 @media(min-width:761px) and (max-height:500px){#collection-entry .collection-sort-label{font-size:22px}#collection-entry .collection-sort-label-middle{font-size:16px}}
 @media(min-width:761px) and (min-height:501px) and (max-height:849px){#collection-entry[data-menu=types] .collection-choice:first-child{position:static}#collection-entry[data-menu=types] .collection-sort-label{top:16px;bottom:auto;right:calc(100% - var(--timeline-x) + 12px)}}
+
+/* Keep timeline lettering consistent across browsers and viewport sizes. */
+#collection-entry .collection-sort-label,#collection-entry .collection-sort-label>span{font-family:'Collection Entry Serif',Georgia,serif!important;font-weight:400!important;font-style:normal;color:#67452f!important;-webkit-text-fill-color:currentColor;text-shadow:none}
