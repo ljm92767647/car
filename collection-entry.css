@@ -110,3 +110,8 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry .collection-choice:first-child::after{content:'Sort';position:absolute;right:calc(100% + var(--timeline-label-gap) + 12px);left:auto;top:auto;bottom:calc(100% + 5px);width:auto;height:auto;background:none;box-shadow:none;filter:none;transform:none;font:400 clamp(18px,2.5vw,40px)/1.1 'Collection Entry Serif',Georgia,serif;color:#665d55;pointer-events:none}
 @media(max-width:760px){#collection-entry::after{top:24px;font-size:clamp(19px,5.4vw,32px)}#collection-entry[data-menu=types]{padding-top:76px}#collection-entry .collection-choice:first-child::after{font-size:clamp(15px,4.6vw,23px);right:calc(100% + var(--timeline-label-gap) + 7px)}}
 @media(max-height:500px){#collection-entry::after{top:16px;font-size:24px}#collection-entry[data-menu=types]{padding-top:67px}#collection-entry .collection-choice:first-child::after{font-size:18px}}
+
+/* Stack the collection name and sorting label on the left of the timeline. */
+#collection-entry::after{content:none}
+#collection-entry .collection-choice:first-child::after{content:'CAR\A COLLECTION\A Sort';white-space:pre;text-align:right;line-height:.98;bottom:calc(100% + 5px);color:#22282d}
+@media(max-width:760px){#collection-entry .collection-choice:first-child::after{font-size:min(clamp(15px,4.6vw,23px),calc((var(--timeline-x) - 12px)/7.3))}}
