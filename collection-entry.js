@@ -58,7 +58,7 @@
  }
  function render(){
   choices=options();root.dataset.menu=site==='pens'?penStage:'classification';
-  root.innerHTML=choices.map((c,i)=>`<button type="button" class="collection-choice" data-choice="${i}"><span class="collection-choice-title">${c.title}</span>${i===0?'<span class="collection-sort-label" aria-hidden="true"><span>CAR</span><span class="collection-sort-label-middle">COLLECTION</span><span>Sort</span></span>':''}</button>`).join('');sync();
+  root.innerHTML=choices.map((c,i)=>`<button type="button" class="collection-choice" data-choice="${i}"><span class="collection-choice-title">${c.title.startsWith('By ')?'<span class="collection-choice-prefix">By</span> '+c.title.slice(3):c.title}</span>${i===0?'<span class="collection-sort-label" aria-hidden="true"><span>CAR</span><span class="collection-sort-label-middle">COLLECTION</span><span>Sort</span></span>':''}</button>`).join('');sync();
  }
  function showHome(){home=true;render();root.querySelector('button')?.focus({preventScroll:true});}
  root.onclick=e=>{const choice=e.target.closest('[data-choice]');if(choice){active=Number(choice.dataset.choice);choices[active].run();}};
