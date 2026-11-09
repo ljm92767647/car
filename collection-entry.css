@@ -172,3 +172,12 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
  #collection-entry[data-menu]{--entry-heading-top:28px;--entry-heading-size:26px;--prefix-size:18px}
  #collection-entry[data-menu=types]{gap:clamp(12px,4.5vh,24px)}
 }
+
+/* Start all menu rows at the former Sort edge. */
+#collection-entry[data-menu]{padding-left:calc(var(--timeline-x) - var(--prefix-inset) - var(--prefix-width))}
+#collection-entry[data-menu] .collection-sort-label{display:none}
+#collection-entry .collection-choice-prefix{position:static;transform:none;font:inherit;letter-spacing:inherit;color:inherit}
+#collection-entry[data-menu]:not([data-menu=types]){align-content:start;padding-top:calc(var(--heading-end) + clamp(36px,7vh,72px))}
+@media(max-width:760px){
+ #collection-entry:has(>.collection-choice:nth-child(2)):not(:has(>.collection-choice:nth-child(3))){gap:var(--menu-gap-two)}
+}
