@@ -104,3 +104,9 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry::before{top:clamp(28px,5vh,48px);width:2px;background:linear-gradient(to bottom,#777d8200 0,#777d82 120px,#777d82 100%)}
 #collection-entry .collection-choice-title::before{left:calc(-1 * var(--timeline-label-gap) - 6px);width:14px;height:14px;background:#665d55;z-index:1}
 
+
+/* Labels beside the existing entry timeline. */
+#collection-entry::after{content:'CAR COLLECTION';position:absolute;top:clamp(44px,7vh,72px);left:calc(var(--timeline-x) + var(--timeline-label-gap));font:400 clamp(30px,4.2vw,72px)/1.08 'Collection Entry Serif',Georgia,serif;letter-spacing:-.035em;color:#665d55;white-space:nowrap;pointer-events:none}
+#collection-entry .collection-choice:first-child::after{content:'Sort';position:absolute;right:calc(100% + var(--timeline-label-gap) + 12px);left:auto;top:auto;bottom:calc(100% + 5px);width:auto;height:auto;background:none;box-shadow:none;filter:none;transform:none;font:400 clamp(18px,2.5vw,40px)/1.1 'Collection Entry Serif',Georgia,serif;color:#665d55;pointer-events:none}
+@media(max-width:760px){#collection-entry::after{top:24px;font-size:clamp(19px,5.4vw,32px)}#collection-entry[data-menu=types]{padding-top:76px}#collection-entry .collection-choice:first-child::after{font-size:clamp(15px,4.6vw,23px);right:calc(100% + var(--timeline-label-gap) + 7px)}}
+@media(max-height:500px){#collection-entry::after{top:16px;font-size:24px}#collection-entry[data-menu=types]{padding-top:67px}#collection-entry .collection-choice:first-child::after{font-size:18px}}
