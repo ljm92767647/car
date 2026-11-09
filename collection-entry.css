@@ -115,3 +115,11 @@ body header h1{font-family:'Collection Entry Serif',Georgia,serif}
 #collection-entry::after{content:none}
 #collection-entry .collection-choice:first-child::after{content:'CAR\A COLLECTION\A Sort';white-space:pre;text-align:right;line-height:.98;bottom:calc(100% + 5px);color:#22282d}
 @media(max-width:760px){#collection-entry .collection-choice:first-child::after{font-size:min(clamp(15px,4.6vw,23px),calc((var(--timeline-x) - 12px)/7.3))}}
+
+/* Let the three timeline labels scale independently. */
+#collection-entry[data-menu]::after,#collection-entry .collection-choice:first-child::after{content:none}
+#collection-entry .collection-sort-label{position:absolute;display:grid;justify-items:end;right:calc(100% + var(--timeline-label-gap) + 12px);bottom:calc(100% + 5px);color:#5e4f43;font:400 clamp(22px,3vw,46px)/.96 'Collection Entry Serif',Georgia,serif;text-align:right;white-space:nowrap;pointer-events:none}
+#collection-entry .collection-sort-label-middle{font-size:clamp(15px,2.15vw,34px)}
+@media(max-width:760px){#collection-entry .collection-sort-label{right:calc(100% + var(--timeline-label-gap) + 7px);font-size:min(clamp(16px,5.5vw,26px),calc((var(--timeline-x) - 10px)/3.3))}#collection-entry .collection-sort-label-middle{font-size:min(clamp(15px,4.6vw,23px),calc((var(--timeline-x) - 12px)/7.3))}}
+@media(min-width:761px) and (max-height:500px){#collection-entry .collection-sort-label{font-size:22px}#collection-entry .collection-sort-label-middle{font-size:16px}}
+@media(min-width:761px) and (min-height:501px) and (max-height:849px){#collection-entry[data-menu=types] .collection-choice:first-child{position:static}#collection-entry[data-menu=types] .collection-sort-label{top:16px;bottom:auto;right:calc(100% - var(--timeline-x) + 12px)}}
