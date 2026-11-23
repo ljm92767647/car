@@ -14,17 +14,10 @@
     header.inert = !open;
     header.setAttribute('aria-hidden', String(!open));
   }
-  const mobileHeader = matchMedia('(max-width: 760px)');
   const measureBar = () => {
-    document.body.classList.remove('uniform-mobile-header');
-    const layoutHeight = header.offsetHeight;
-    document.body.style.setProperty('--menu-layout-height', layoutHeight + 'px');
-    document.body.classList.toggle('uniform-mobile-header', mobileHeader.matches);
     document.body.style.setProperty('--menu-bar-height', header.offsetHeight + 'px');
   };
   new ResizeObserver(measureBar).observe(header);
-  addEventListener('resize', measureBar);
-  document.fonts.ready.then(measureBar);
   measureBar();
   setOpen(false);
   toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
