@@ -123,3 +123,12 @@ body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-c
     --pen-entry-gap: clamp(12px, 4.5vh, 24px);
   }
 }
+
+/* Lift selected mobile entry choices without shifting the surrounding layout. */
+@media (max-width: 760px) {
+  body[data-entry-site="watches"] #collection-entry > .collection-choice:nth-child(n+2),
+  body:is([data-entry-site="cards"], [data-entry-site="cars"]) #collection-entry > .collection-choice:nth-child(2),
+  body[data-entry-site="pens"] #collection-entry[data-menu="fountain"] > .collection-choice:nth-child(2) {
+    top: -12px;
+  }
+}
