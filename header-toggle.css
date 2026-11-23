@@ -1,4 +1,16 @@
-/* The header keeps its layout space so toggling never moves the collection. */
+/* Keep the empty bar visible while the controls slide down into it. */
+body[data-menu-open]::before {
+  content: '';
+  position: fixed;
+  z-index: 9;
+  inset: 0 0 auto;
+  height: 48px;
+  background: #e7e3e0;
+  pointer-events: none;
+  transition: height .3s ease;
+}
+body[data-menu-open="true"]::before { height: var(--menu-bar-height, 48px); }
+body[data-menu-open] > header { z-index: 10; background: transparent; }
 body[data-menu-open] > header {
   transition: opacity .24s ease, transform .3s ease, visibility .3s;
 }
@@ -62,4 +74,24 @@ body[data-menu-open] > header h1 { margin-left: 0; }
 @media (max-width: 760px) {
   #collection-entry[data-menu]::after { font-size: clamp(30px, 8.4vw, 42px); }
   .catalog-group-head h2 { font-size: 18px; }
+}
+
+/* Give the watch heading the same breathing room as the pen entry page. */
+body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-choice:nth-child(3)) {
+  padding-top: calc(var(--heading-end) + 128px);
+  gap: clamp(24px, 7vh, 64px);
+}
+@media (max-width: 760px) {
+  body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-choice:nth-child(3)) {
+    padding-top: calc(var(--entry-heading-top) + clamp(30px, 8.4vw, 42px) * 1.08 + clamp(80px, calc(37.2vh - 134px), 184px));
+  }
+}
+@media (max-height: 500px) {
+  body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-choice:nth-child(3)) {
+    padding-top: calc(var(--entry-heading-top) + clamp(30px, 8.4vw, 42px) * 1.08 + 32px);
+    gap: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-menu-open]::before { transition: none; }
 }

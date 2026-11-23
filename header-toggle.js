@@ -14,6 +14,11 @@
     header.inert = !open;
     header.setAttribute('aria-hidden', String(!open));
   }
+  const measureBar = () => {
+    document.body.style.setProperty('--menu-bar-height', header.offsetHeight + 'px');
+  };
+  new ResizeObserver(measureBar).observe(header);
+  measureBar();
   setOpen(false);
   toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
 })();
