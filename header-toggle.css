@@ -98,18 +98,17 @@ body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-c
 
 /* Match the pen entry page's four mobile row positions. */
 @media (max-width: 760px) {
-  body:is([data-entry-site="watches"], [data-entry-site="cards"], [data-entry-site="cars"]) #collection-entry[data-menu] {
+  body[data-entry-site="watches"] #collection-entry[data-menu] {
     position: fixed;
     top: 79px;
     bottom: 0;
     align-content: center;
-    grid-template-rows: repeat(4, calc(clamp(28px, 7.6vw, 36px) * 1.2 + 12px));
+    --pen-entry-row: calc(clamp(28px, 7.6vw, 36px) * 1.2 + 12px);
+    --pen-entry-gap: clamp(12px, 5vh, 55px);
+    grid-template-rows: repeat(3, var(--pen-entry-row));
     padding-top: calc(var(--heading-end) + 18px) !important;
     padding-bottom: 24px;
-    gap: clamp(12px, 5vh, 55px) !important;
-  }
-  body:is([data-entry-site="cards"], [data-entry-site="cars"]) #collection-entry > .collection-choice:nth-child(2) {
-    grid-row: 3;
+    gap: calc(var(--pen-entry-row) * .5 + var(--pen-entry-gap) * 1.5) !important;
   }
   #catalog-pane .catalog-group-head {
     position: sticky;
@@ -119,8 +118,8 @@ body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-c
   }
 }
 @media (max-width: 760px) and (max-height: 500px) {
-  body:is([data-entry-site="watches"], [data-entry-site="cards"], [data-entry-site="cars"]) #collection-entry[data-menu] {
-    grid-template-rows: repeat(4, 37.2px);
-    gap: clamp(12px, 4.5vh, 24px) !important;
+  body[data-entry-site="watches"] #collection-entry[data-menu] {
+    --pen-entry-row: 37.2px;
+    --pen-entry-gap: clamp(12px, 4.5vh, 24px);
   }
 }
