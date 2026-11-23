@@ -132,3 +132,100 @@ body[data-entry-site="watches"] #collection-entry[data-menu]:has(> .collection-c
     top: -12px;
   }
 }
+
+/* Share mobile header rows while preserving each page's original content origin. */
+@media (max-width: 760px) {
+  body.uniform-mobile-header[data-menu-open] > #collection-header {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) auto;
+    grid-template-rows: 36px 28px 28px;
+    align-content: start;
+    align-items: center;
+    gap: 4px;
+    height: 108px;
+    min-height: 108px;
+    max-height: 108px;
+    padding: 4px 8px;
+    margin-bottom: calc(var(--menu-layout-height) - 108px);
+  }
+  body.uniform-mobile-header #collection-header h1 {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0 0 0 44px;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+  body.uniform-mobile-header #collection-header h1 span {
+    font-size: 10px;
+    font-weight: 400;
+    margin-left: 5px;
+  }
+  body.uniform-mobile-header #collection-header .header-break { display: none; }
+  body.uniform-mobile-header #collection-header .collection-controls,
+  body.uniform-mobile-header #collection-header .header-actions { display: contents; }
+  body.uniform-mobile-header #collection-header .view-switch {
+    grid-column: 1;
+    grid-row: 2;
+    width: 76px;
+    height: 28px;
+    margin: 0;
+    align-self: center;
+  }
+  body.uniform-mobile-header #collection-header nav {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    margin: 0;
+    width: auto;
+  }
+  body.uniform-mobile-header #collection-header button {
+    font-size: 10px;
+    line-height: 16px;
+    min-height: 28px;
+    padding: 5px 6px;
+  }
+  body.uniform-mobile-header #collection-header .view-switch button {
+    font-size: 10px !important;
+    padding: 0;
+    min-height: 0;
+  }
+  body.uniform-mobile-header #collection-header :is(#number, #numbers) {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    position: static;
+    margin: 0;
+    padding: 5px 0;
+    font-size: 9px;
+    line-height: 16px;
+    min-height: 28px;
+  }
+  body.uniform-mobile-header[data-entry-site="pens"] #collection-header :is(#classification, #daily-classification) {
+    grid-column: 2 / 4;
+    grid-row: 3;
+  }
+  body.uniform-mobile-header #collection-header #rank {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: start;
+    margin: 0;
+    padding-left: 0;
+  }
+  body.uniform-mobile-header #collection-header :is(.filters, #classic-control) {
+    grid-column: 2 / 4;
+    grid-row: 3;
+    justify-self: end;
+    align-items: center;
+    margin: 0;
+    gap: 4px;
+  }
+}
